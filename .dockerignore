@@ -1,0 +1,11 @@
+.git
+.venv
+venv
+__pycache__
+*.pyc
+*.pyo
+.env
+db.sqlite3
+frontend_react/node_modules
+frontend_react/dist
+.DS_Store
