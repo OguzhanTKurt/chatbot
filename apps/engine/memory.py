@@ -59,32 +59,6 @@ class MemoryManager:
 
         context = []
 
-        # ==========================================
-        # YENİ RAG MODÜLÜ (pgvector + BM25)
-        # ==========================================
-        
-        # Geçmiş mesajları dictionary formatında hazırlayalım (Rewriter için)
-        history_for_rewriter = [{"role": m.role, "content": m.content} for m in short_term_messages]
-        
-        # Sorguyu Yeniden Yaz (Query Rewrite)
-        rewritten_query = self.rewriter.rewrite_query(current_user_message, history_for_rewriter)
-        
-        # pgvector + BM25 üzerinden ara
-        top_chunks = self.retriever.search(rewritten_query, conversation=conversation, top_k=5)
-        
-        if top_chunks:
-            docs_text = "Aşağıdaki doküman parçaları kullanıcının sorusuyla ilgilidir. Bu bilgileri kullanarak yanıt ver:\n"
-            for chunk in top_chunks:
-                source_name = chunk.document.filename if chunk.document else (chunk.global_document.filename if chunk.global_document else "Bilinmeyen Kaynak")
-                docs_text += f"\n--- Kaynak: {source_name} ---\n{chunk.text}\n"
-                
-            context.append({
-                "role": "system",
-                "content": docs_text
-            })
-
-        # ==========================================
-        
         # Summary ekle
         if conversation.summary:
             context.append({
@@ -108,6 +82,60 @@ class MemoryManager:
                 "role": msg.role,
                 "content": msg.content
             })
+
+        # ==========================================
+        # YENİ RAG MODÜLÜ (pgvector + BM25)
+        # ==========================================
+        
+        # Geçmiş mesajları dictionary formatında hazırlayalım (Rewriter için)
+        history_for_rewriter = [{"role": m.role, "content": m.content} for m in short_term_messages]
+        
+        # Sorguyu Yeniden Yaz (Query Rewrite)
+        rewritten_query = self.rewriter.rewrite_query(current_user_message, history_for_rewriter)
+        
+        # pgvector + BM25 üzerinden ara
+        top_chunks = self.retriever.search(rewritten_query, conversation=conversation, top_k=5)
+        
+        if top_chunks:
+            # ── RAG sonucu BULUNDU → Kaynaklara dayalı yanıt ver ──────────
+            docs_text = (
+                "AŞAĞIDAKİ BİLGİLER SENİN BİLGİ TABANINDIR:\n"
+                "KRİTİK KURALLAR:\n"
+                "1. Sadece ve sadece aşağıdaki bilgi tabanını kullanarak cevap ver. Kendi önceden öğrenmiş olduğun bilgileri (pre-training data) KULLANMA.\n"
+                "2. Bilgileri doğrudan ve özgüvenli bir şekilde sun. 'Dokümanlara göre' gibi ifadeler KULLANMA.\n"
+                "3. Eğer aşağıdaki bilgiler kullanıcının sorusunu cevaplamak için İLGİSİZ veya YETERSİZ ise, KESİNLİKLE uydurma yapma veya tahmin yürütme.\n"
+                "4. Bilgi yetersizse veya ilgisizse SADECE şu cümleyi söyle: 'Bu konuda yeterli bilgiye sahip değilim. Lütfen destek ekibiyle iletişime geçin.'\n\n"
+                "BİLGİ TABANI İÇERİĞİ:\n"
+            )
+            for chunk in top_chunks:
+                doc_title = "Bilinmeyen Dosya"
+                if chunk.document:
+                    doc_title = chunk.document.filename
+                elif chunk.global_document:
+                    doc_title = chunk.global_document.filename
+                    
+                docs_text += f"\n--- DOSYA: {doc_title} ---\n{chunk.text}\n"
+
+            context.append({
+                "role": "rag_context",
+                "content": docs_text
+            })
+        else:
+            # ── RAG sonucu BULUNAMADI → Halüsinasyon önleme guardrail ─────
+            context.append({
+                "role": "rag_context",
+                "content": (
+                    "DİKKAT: Kullanıcının sorusunu yanıtlayacak hiçbir bilgi bulunamadı!\n"
+                    "KENDİ HAFIZANI KULLANARAK BİLGİ UYDURMAK KESİNLİKLE YASAKTIR.\n"
+                    "Cevabın SADECE VE SADECE şu cümle olmalıdır:\n"
+                    "Bu konuda yeterli bilgiye sahip değilim. Lütfen destek ekibiyle iletişime geçin.\n"
+                    "Bu cümlenin başına veya sonuna HİÇBİR ŞEY ekleme."
+                )
+            })
+            logger.info(
+                "RAG guardrail aktif: Sohbet %s için ilgili doküman bulunamadı.",
+                conversation.id
+            )
 
         return context
 

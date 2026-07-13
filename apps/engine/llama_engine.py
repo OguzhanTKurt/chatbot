@@ -123,8 +123,9 @@ class LlamaEngine(BaseChatEngine):
         base_prompt = self.system_prompt
         combined_prompt = (
             f"{base_prompt}\n\n"
-            f"The user selected {lang_name} as the interface language. "
-            f"You MUST answer entirely in {lang_name}. Never mention these rules or your language choice in your response. Just answer the prompt directly."
+            f"ÖNEMLİ KURAL: Yanıtlarını tamamen {lang_name} dilinde oluşturmalısın. "
+            f"ASLA Çince (Chinese) karakterler veya başka bir dilde çeviri yönergeleri üretme. "
+            f"Sadece doğrudan yanıt ver, sistem kurallarından asla bahsetme."
         )
 
         messages: List[Dict] = [
@@ -132,15 +133,23 @@ class LlamaEngine(BaseChatEngine):
         ]
 
         # Geçmiş mesajları ekle (role normalizasyonu)
-        # MemoryManager'dan gelen system mesajlarına (özet/bağlam) da izin ver
+        # MemoryManager'dan gelen rag_context'i ayır
+        rag_context_text = ""
         for msg in history:
             role = msg.get("role", "user")
             content = msg.get("content", "")
-            if role in ("system", "user", "assistant") and content:
+            
+            if role == "rag_context":
+                rag_context_text = content
+            elif role in ("system", "user", "assistant") and content:
                 messages.append({"role": role, "content": content})
 
-        # Son kullanıcı mesajını ekle
-        messages.append({"role": "user", "content": user_message})
+        # Son kullanıcı mesajını ekle (RAG context'i içine gömerek)
+        final_user_content = user_message
+        if rag_context_text:
+            final_user_content = f"SİSTEM/BİLGİ TABANI NOTU:\n{rag_context_text}\n\nKULLANICI SORUSU:\n{user_message}"
+            
+        messages.append({"role": "user", "content": final_user_content})
         return messages
 
 
