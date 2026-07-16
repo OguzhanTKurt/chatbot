@@ -1,0 +1,75 @@
+.slide-container {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  background-color: var(--bg-hover);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.slide-container.confirmed {
+  background-color: rgba(220, 53, 69, 0.15); /* Danger/Red background for delete action */
+  border-color: rgba(220, 53, 69, 0.3);
+}
+
+.slide-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: rgba(220, 53, 69, 0.2);
+  transition: width 0.1s;
+}
+
+.slide-text {
+  position: relative;
+  z-index: 1;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #a0a4b8;
+  pointer-events: none;
+  transition: color 0.3s;
+}
+
+.slide-container.confirmed .slide-text {
+  color: #ff6b6b;
+}
+
+.slide-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 32px;
+  height: 32px;
+  background-color: var(--bg-elevated);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s, left 0.1s;
+  z-index: 2;
+}
+
+.slide-thumb:active {
+  cursor: grabbing;
+  background-color: var(--bg-active);
+}
+
+.slide-container.confirmed .slide-thumb {
+  background-color: #ff4757;
+  border-color: #ff4757;
+  color: white;
+  cursor: default;
+}

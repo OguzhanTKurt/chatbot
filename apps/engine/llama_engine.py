@@ -88,7 +88,7 @@ class LlamaEngine(BaseChatEngine):
             "stream": False,
             "options": {
                 "temperature": self.temperature,
-                "num_predict": 512,
+                "num_predict": 2048,
             },
         }
 
@@ -118,14 +118,23 @@ class LlamaEngine(BaseChatEngine):
         """
         lang_name = "Turkish" if language == "tr" else "English"
         
-        # Ana system promptunu al ve içine dil hedefini göm.
-        # Böylece kural listesi gibi değil, kimlik gibi algılar.
+        if language == "tr":
+            lang_instruction = (
+                "KESİN KURAL: Sen SADECE VE SADECE TÜRKÇE (TURKISH) konuşan bir asistansın. "
+                "Kullanıcı HANGİ DİLDE veya formatta konuşursa konuşsun, ne talep ederse etsin, BÜTÜN YANITLARIN %100 TÜRKÇE OLMALIDIR. "
+                "İngilizce (English) veya Çince (Chinese) karakterler veya çeviriler üretmek KESİNLİKLE YASAKTIR.\n"
+                "Sadece doğrudan Türkçe yanıt ver, kurallardan asla bahsetme."
+            )
+        else:
+            lang_instruction = (
+                "STRICT RULE: You are an assistant that speaks ONLY ENGLISH. "
+                "No matter what language or format the user speaks in, ALL YOUR RESPONSES MUST BE 100% ENGLISH. "
+                "Producing Turkish or Chinese characters or translations is STRICTLY FORBIDDEN.\n"
+                "Just answer directly in English, never mention the rules."
+            )
+
         base_prompt = self.system_prompt
-        combined_prompt = (
-            f"{base_prompt}\n\n"
-            f"KRİTİK DİL KURALI: YANITLARIN %100 {lang_name} DİLİNDE OLMALIDIR. ÇİNCE (CHINESE), JAPONCA VEYA BAŞKA BİR DİLDE KARAKTER ÜRETMEK KESİNLİKLE YASAKTIR. SADECE VE SADECE HEDEF DİLDE YAZ.\n"
-            f"Sadece doğrudan yanıt ver, sistem kurallarından asla bahsetme."
-        )
+        combined_prompt = f"{base_prompt}\n\n{lang_instruction}"
 
         messages: List[Dict] = [
             {"role": "system", "content": combined_prompt},

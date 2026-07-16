@@ -106,13 +106,21 @@ CONTEXT_WINDOW = config("CONTEXT_WINDOW", default=20, cast=int)
 OLLAMA_BASE_URL = config("OLLAMA_BASE_URL", default="http://localhost:11434")
 OLLAMA_MODEL    = config("OLLAMA_MODEL", default="llama3")
 OLLAMA_TEMPERATURE = config("OLLAMA_TEMPERATURE", default=0.3, cast=float)
-SYSTEM_PROMPT   = config(
-    "SYSTEM_PROMPT",
-    default=(
-        "Sen Türkçe konuşan yardımcı bir yapay zeka asistanısın. "
-        "Kullanıcıyla nazik ve samimi bir şekilde sohbet et."
-    ),
-)
+
+# ── System Prompt ─────────────────────────────────────────────────────────────
+# Önce config/prompts/system_prompt.txt dosyasından yükle.
+# Dosya bulunamazsa .env'deki SYSTEM_PROMPT değerini kullan.
+_PROMPT_FILE = BASE_DIR / "config" / "prompts" / "system_prompt.txt"
+if _PROMPT_FILE.is_file():
+    SYSTEM_PROMPT = _PROMPT_FILE.read_text(encoding="utf-8").strip()
+else:
+    SYSTEM_PROMPT = config(
+        "SYSTEM_PROMPT",
+        default=(
+            "Sen Türkçe konuşan yardımcı bir yapay zeka asistanısın. "
+            "Kullanıcıyla nazik ve samimi bir şekilde sohbet et."
+        ),
+    )
 
 
 # ── DRF ───────────────────────────────────────────────────────────────────────

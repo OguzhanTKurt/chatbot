@@ -3,7 +3,7 @@ from apps.rag.models import DocumentChunk
 from django.db import transaction
 
 # Model global olarak yüklenir ki her fonksiyonda tekrar baştan yüklenmesin
-embedding_model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+embedding_model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2', local_files_only=True)
 
 class DocumentChunker:
     """

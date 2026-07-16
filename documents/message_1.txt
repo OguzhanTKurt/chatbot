@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yapay Zeka Dosya Analizi</title>
+    <style>
+        /* Modern ve Temiz Bir Arayüz Tasarımı */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #bdc3c7;
+            border-radius: 6px;
+            background-color: #f9fbfc;
+            cursor: pointer;
+        }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bdc3c7;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-family: inherit;
+            resize: vertical;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .result-box {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 6px;
+            border-left: 4px solid #2ecc71;
+            min-height: 60px;
+            white-space: pre-wrap; 
+            word-wrap: break-word;
+            color: #2c3e50;
+            line-height: 1.5;
+        }
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
+            display: none; 
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Dosya Analiz Asistanı</h2>
+        
+        <div class="form-group">
+            <label for="fileInput">İncelenecek Dosyayı Seçin:</label>
+            <input type="file" id="fileInput" accept=".txt, .pdf, .png, .jpg, .jpeg, .csv, .py, .md" />
+        </div>
+
+        <div class="form-group">
+            <label for="promptInput">Yapay Zekadan Ne İstiyorsunuz?</label>
+            <textarea id="promptInput" rows="4" placeholder="Örn: Bu PDF'in özetini çıkar..."></textarea>
+        </div>
+
+        <button id="submitBtn" onclick="sendDataTon8n()">
+            <div class="spinner" id="spinner"></div>
+            <span id="btnText">Analiz Et</span>
+        </button>
+
+        <div class="result-box">
+            <strong>Sonuç:</strong>
+            <div id="resultArea" style="margin-top: 10px;">Bekleniyor...</div>
+        </div>
+    </div>
+
+    <script>
+        async function sendDataTon8n() {
+            const fileInput = document.getElementById('fileInput');
+            const promptInput = document.getElementById('promptInput').value;
+            const resultArea = document.getElementById('resultArea');
+            const submitBtn = document.getElementById('submitBtn');
+            const spinner = document.getElementById('spinner');
+            const btnText = document.getElementById('btnText');
+
+            if (fileInput.files.length === 0) {
+                alert("Lütfen işleme başlamadan önce bir dosya seçin.");
+                return;
+            }
+            if (promptInput.trim() === "") {
+                alert("Lütfen yapay zeka için bir komut (prompt) girin.");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            spinner.style.display = "block";
+            btnText.innerText = "İşleniyor...";
+            resultArea.innerHTML = "<em>Yapay zeka dosyayı inceliyor, lütfen bekleyin... (Bu işlem donanıma bağlı olarak biraz sürebilir)</em>";
+
+            const formData = new FormData();
+            const secilenDosya = fileInput.files[0];
+            const dosyaUzantisi = secilenDosya.name.split('.').pop().toLowerCase();
+
+            formData.append("file", secilenDosya); 
+            formData.append("prompt", promptInput);
+            formData.append("fileType", dosyaUzantisi); 
+
+            // DİKKAT: URL'deki "webhook-test" kısmını üretim ortamında "webhook" yapmayı unutma!
+            const n8nWebhookURL = "http://localhost:5678/webhook-test/ai-rag-analiz"; 
+
+            try {
+                const response = await fetch(n8nWebhookURL, {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (response.ok) {
+                    // YENİ EKLEME: n8n'den gelen cevabın formatını akıllıca kontrol et
+                    const contentType = response.headers.get("content-type");
+                    let resultData = "";
+
+                    if (contentType && contentType.includes("application/json")) {
+                        // Eğer n8n cevabı JSON objesi olarak gönderdiyse içindeki metni bulur
+                        const jsonData = await response.json();
+                        resultData = jsonData.text || jsonData.data || JSON.stringify(jsonData);
+                    } else {
+                        // Eğer n8n cevabı düz metin gönderdiyse doğrudan okur
+                        resultData = await response.text(); 
+                    }
+                    
+                    resultArea.innerText = resultData;
+                } else {
+                    resultArea.innerHTML = `<span style="color: red;">Sunucu Hatası: ${response.status} - İşlem reddedildi. Lütfen n8n Webhook düğümünde CORS'un açık olduğundan emin ol.</span>`;
+                }
+            } catch (error) {
+                console.error("Fetch Hatası:", error);
+                resultArea.innerHTML = `<span style="color: red;">Bağlantı hatası! n8n'e ulaşılamıyor.<br><br>Olası Sebepler:<br>1- URL'de "webhook-test" yazıyor ama n8n'de 'Test Workflow' butonuna basmadın.<br>2- Tarayıcı CORS politikası sebebiyle isteği engelledi.</span>`;
+            } finally {
+                submitBtn.disabled = false;
+                spinner.style.display = "none";
+                btnText.innerText = "Analiz Et";
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,4 +1,5 @@
 import React from 'react';
+import SlideToConfirm from './SlideToConfirm';
 
 const TRANSLATIONS = {
   tr: {
@@ -6,16 +7,20 @@ const TRANSLATIONS = {
     newChatTitle: "Yeni sohbet",
     noChats: "Henüz sohbet yok.",
     defaultChatTitle: "Yeni Sohbet",
+    clearAll: "Hepsini Sil",
+    clearedAll: "Silindi"
   },
   en: {
     newChat: "New Chat",
     newChatTitle: "New chat",
     noChats: "No chats yet.",
     defaultChatTitle: "New Chat",
+    clearAll: "Clear All",
+    clearedAll: "Cleared"
   }
 };
 
-const Sidebar = ({ conversations, activeConversationId, onSelect, onCreate, language, setLanguage, isCollapsed, theme, setTheme, onOpenGlobalDocs }) => {
+const Sidebar = ({ conversations, activeConversationId, onSelect, onCreate, onClearAll, language, setLanguage, isCollapsed, theme, setTheme, onOpenGlobalDocs }) => {
   const t = TRANSLATIONS[language];
 
   return (
@@ -61,15 +66,13 @@ const Sidebar = ({ conversations, activeConversationId, onSelect, onCreate, lang
       </nav>
 
       <div className="sidebar-footer">
-        <button 
-          className="btn-new-chat" 
-          style={{ marginBottom: '10px', backgroundColor: 'var(--bg)', border: '1px solid var(--border)', color: 'var(--text-main)' }} 
-          onClick={onOpenGlobalDocs}
-          title={language === 'tr' ? "Genel Bilgi Bankası" : "Global Knowledge Base"}
-        >
-          <span style={{marginRight: '8px'}}>📚</span>
-          <span>{language === 'tr' ? "Genel Bilgi Bankası" : "Global Docs"}</span>
-        </button>
+        {conversations.length > 0 && (
+          <SlideToConfirm 
+            onConfirm={onClearAll} 
+            text={t.clearAll} 
+            successText={t.clearedAll} 
+          />
+        )}
         <div className="lang-switch-wrapper">
           <div className={`lang-switch ${language === 'en' ? 'en-active' : ''}`}>
             <div className="lang-switch-indicator"></div>

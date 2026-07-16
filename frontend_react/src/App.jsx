@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import ChatArea from './components/ChatArea';
 import EmptyState from './components/EmptyState';
-import GlobalDocumentsModal from './components/GlobalDocumentsModal';
 import { API } from './services/api';
 
 const TRANSLATIONS = {
@@ -36,7 +35,6 @@ function App() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [toast, setToast] = useState(null);
-  const [isGlobalDocsOpen, setIsGlobalDocsOpen] = useState(false);
 
 
   useEffect(() => {
@@ -115,6 +113,18 @@ function App() {
     }
   };
 
+  const clearAllConversations = async () => {
+    if (conversations.length === 0) return;
+    try {
+      await Promise.all(conversations.map(c => API.deleteConversation(c.id)));
+      setConversations([]);
+      setActiveConversationId(null);
+      showToast(language === 'tr' ? "Tüm sohbetler silindi." : "All chats cleared.", "success");
+    } catch(err) {
+      showToast(TRANSLATIONS[language].toastDeleteFailed + err.message, "error");
+    }
+  };
+
   const sendMessage = async (content) => {
     if (isSending || !activeConversationId) return;
 
@@ -184,13 +194,13 @@ function App() {
         activeConversationId={activeConversationId}
         onSelect={setActiveConversationId}
         onCreate={createConversation}
+        onClearAll={clearAllConversations}
         language={language}
         setLanguage={setLanguage}
         theme={theme}
         setTheme={setTheme}
 
         isCollapsed={isSidebarCollapsed}
-        onOpenGlobalDocs={() => setIsGlobalDocsOpen(true)}
       />
 
       <main className="chat-main" id="chat-main">
@@ -216,12 +226,6 @@ function App() {
           {toast.message}
         </div>
       )}
-
-      <GlobalDocumentsModal 
-        isOpen={isGlobalDocsOpen} 
-        onClose={() => setIsGlobalDocsOpen(false)} 
-        language={language} 
-      />
     </div>
   );
 }

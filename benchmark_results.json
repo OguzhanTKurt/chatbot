@@ -1,0 +1,154 @@
+{
+  "results": [
+    {
+      "id": 1,
+      "question": "Selam, nasılsın?",
+      "response": "Merhaba! İyiyim, teşekkür ederim. Size nasıl yardımcı olabilirim?"
+    },
+    {
+      "id": 2,
+      "question": "Günaydın, bugün hava nasıl?",
+      "response": "Günaydın! Hava durumu hakkında bilgi sahibi değilim. Lütfen yerel hava durumu servislerinden en son bilgileri kontrol edin. Size yardımcı olabileceğim başka bir konu var mı?"
+    },
+    {
+      "id": 3,
+      "question": "Teşekkür ederim, çok yardımcı oldun.",
+      "response": "Teşekkür ederim! Size yardımcı olmaktan mutluluk duyarım. Başka bir konuda sorularınız var mı?"
+    },
+    {
+      "id": 4,
+      "question": "Adın ne senin, kimsin?",
+      "response": "Ben AKTAP AI olarak adlandırılıyorum. Size mold(tooling) tasarım ve yönetim konularında yardımcı olmaktayım. Adınız nedir? Size nasıl yardımcı olabilirim?"
+    },
+    {
+      "id": 5,
+      "question": "Bash 6.0 sürümündeki quantum-loop özelliği nasıl kullanılır?",
+      "response": "Bu konuda yeterli bilgiye sahip değilim. Lütfen destek ekibiyle iletişime geçin veya ilgili modül dokümantasyonunu inceleyin."
+    },
+    {
+      "id": 6,
+      "question": "Linux çekirdeğinde (kernel) bellek yönetimi C koduyla nasıl yazılır?",
+      "response": "Bellek yönetimi, Linux çekirdeği içinde C ile gerçekleştirmek için aşağıdaki adımlar ve teknikler kullanabilirsiniz:\n\n1. **Bellek Önbellekleme (Caching):**\n   - Bellek önbelleğinin yönetimi, ` slab` veya `mm` modüllerinde bulunur.\n   - Örneğin, `slab` modülü, bellek önbelleğini yönetmek için özel bir bellek yöneticisi sağlar.\n\n2. **Bellek Atama ve Serileştirme:**\n   - Bellek atamaları ve serileştirmeleri gerçekleştirmek için `malloc`, `free`, `realloc` gibi standart C fonksiyonlarını kullanabilirsiniz.\n   - Örneğin:\n     ```c\n     void *ptr = malloc(size);\n     if (ptr == NULL) {\n         // Hata yönetimi\n     }\n     free(ptr);\n     ```\n\n3. **Bellek Blokları Yönetimi:**\n   - Bellek bloklarını yönetmek için `kmalloc` ve `kfree` gibi çekirdeği özel fonksiyonları kullanabilirsiniz.\n   - Örneğin:\n     ```c\n     void *ptr = kmalloc(size, GFP_KERNEL);\n     if (ptr == NULL) {\n         // Hata yönetimi\n     }\n     kfree(ptr);\n     ```\n\n4. **Bellek Sayfaları Yönetimi:**\n   - Bellek sayfalarını yönetmek için `vmalloc` ve `vfree` gibi fonksiyonları kullanabilirsiniz.\n   - Örneğin:\n     ```c\n     void *ptr = vmalloc(size);\n     if (ptr == NULL) {\n         // Hata yönetimi\n     }\n     vfree(ptr);\n     ```\n\n5. **Bellek Çekirdeği Bağımlılıkları:**\n   - Bellek çekirdeği bağımlılıklarını yönetmek için `vmalloc` ve `vfree` gibi fonksiyonları kullanabilirsiniz.\n   - Örneğin:\n     ```c\n     struct page *page = alloc_pages(GFP_KERNEL, order);\n     if (!page) {\n         // Hata yönetimi\n     }\n     free_pages(page, order);\n     ```\n\n6. **Bellek Ç"
+    },
+    {
+      "id": 7,
+      "question": "Bash scriptinde React component'i nasıl render edilir?",
+      "response": "Bu konuda yeterli bilgiye sahip değilim. Bash, bir shell dilidir ve React gibi JavaScript kütüphanelerini çalıştırmak için özel bir ortam gerektirir. Bash scriptlerinde React component'lerini render etmek mümkün değildir.\n\nReact, Node.js veya bir web tarayıcısında çalıştırılan JavaScript ortamlarında kullanılır. Eğer bir Node.js uygulaması içinde React kullanmak istiyorsanız, aşağıdaki adımları izleyebilirsiniz:\n\n1. Bir Node.js projesi oluşturun.\n2. React kütüphanesini projenize ekleyin:\n   ```bash\n   npm install react\n   ```\n3. Bir JavaScript dosyası oluşturun ve React component'lerinizi yazın.\n\nÖrnek bir komponent:\n\n```javascript\n// Komponent.js\nimport React from 'react';\n\nfunction MyComponent() {\n  return <div>Hosgeldiniz!</div>;\n}\n\nexport default MyComponent;\n```\n\n4. Bu komponenti render etmek için bir uygulama oluşturun ve kullanın.\n\nÖrnek bir uygulama:\n\n```javascript\n// App.js\nimport React from 'react';\nimport MyComponent from './Komponent';\n\nfunction App() {\n  return (\n    <div>\n      <MyComponent />\n    </div>\n  );\n}\n\nexport default App;\n```\n\n5. Uygulamayı çalıştırın:\n   ```bash\n   npm start\n   ```\n\nBu adımlar, Node.js ortamında React component'lerini kullanmaya yardımcı olur. Bash scriptleri için React kullanmak mümkün değildir."
+    },
+    {
+      "id": 8,
+      "question": "Bash scriptlerinde while döngüsü nasıl yazılır?",
+      "response": "`while` döngüsü Bash scriptlerinde kullanmak için aşağıdaki adımları izleyebilirsiniz:\n\n1. Döngü koşulu belirleyin.\n2. Koşulun doğru olduğu sürece, döngünün içindeki komutları çalıştırın.\n\nÖrnek bir `while` döngüsü:\n\n```bash\n#!/bin/bash\n\n# Başlangıç değeri atayın\ni=1\n\n# Döngü koşulu belirleyin: i 5'e eşit veya küçük olduğu sürece döngü devam edecek\nwhile [ $i -le 5 ]; do\n    echo \"Döngüdeki değer: $i\"\n    # Değişkeni artırmak için i'yi 1 artırın\n    ((i++))\ndone\n```\n\nBu örnekte:\n\n- `i=1` ile döngünün başlangıç değeri atandı.\n- `[ $i -le 5 ]` koşulu, `i` değişkeninin 5'e eşit veya küçük olduğu sürece döngü devam edecek.\n- `echo \"Döngüdeki değer: $i\"` komutu, her iterasyonda `i` değeri ekrana yazdırılacak.\n- `((i++))` ifadesi, her iterasyondan sonra `i` değişkenini 1 artırır.\n\nBu döngüsü çalıştırıldığında, `Döngüdeki değer: 1`, `Döngüdeki değer: 2`, ..., `Döngüdeki değer: 5` mesajları ekrana yazdırılacaktır. Daha sonra `i` değeri 6 olacak ve koşul sağlanmayacağı için döngü sona erişecek."
+    },
+    {
+      "id": 9,
+      "question": "Bir değişkenin değerini ekrana nasıl yazdırabilirim?",
+      "response": "Bash scriptlerinde bir değişkenin değerini ekrana yazdırmak için `echo` komutunu kullanabilirsiniz. İşte basit bir örnek:\n\n```bash\n#!/bin/bash\n\n# Bir değişken tanımlayın ve değeri atayın\nmesaj=\"Merhaba, Bash!\"\n\n# Değişkenin değerini ekrana yazdırın\necho \"$mesaj\"\n```\n\nBu scriptte:\n\n1. `mesaj` adında bir değişken tanımlandı ve \"Merhaba, Bash!\" değerine atanması yapıldı.\n2. `echo \"$mesaj\"` komutu, `$mesaj` içindeki değeri ekrana yazdırdı.\n\nDeğişkenin değerini kullanmak için `$` simgesi kullanılır. Bu, değişkenin içindeki değeri yerine koymayı sağlar. Örneğin:\n\n```bash\n#!/bin/bash\n\nad=\"Ayşe\"\nsoyad=\"Yılmaz\"\n\n# Ad ve soyad değişkenlerinin değerlerini ekrana yazdırın\necho \"Adınız: $ad\"\necho \"Soyadınız: $soyad\"\n```\n\nBu scriptte:\n\n1. `ad` ve `soyad` adında iki değişken tanımlandı.\n2. `echo` komutu kullanılarak, her bir değişkenin değerleri ekrana yazdırıldı.\n\nBu yöntemle, Bash scriptlerinde istediğiniz kadar değişkeni rahatlıkla ekrana yazdırabilirsiniz."
+    },
+    {
+      "id": 10,
+      "question": "Komut çıktısını bir değişkene nasıl atarım?",
+      "response": "Bash scriptlerinde komut çıktısını bir değişkene atamak için `$(command)` veya backticks (`) kullanabilirsiniz. İşte basit bir örnek:\n\n```bash\n#!/bin/bash\n\n# Komut çıktısını bir değişkene atayın\nsonuc=$(ls)\n\n# Değişkeni ekrana yazdırın\necho \"$sonuc\"\n```\n\nBu scriptte:\n\n1. `$(ls)` ifadesi, `ls` komutunun çıktısını alır ve bu çıktıyı `sonuc` değişkenine atar.\n2. `echo \"$sonuc\"` komutu, `sonuc` değişkeninin değerini ekrana yazdırır.\n\nAyrıca, backticks (`) kullanarak aynı işlemi gerçekleştirebilirsiniz:\n\n```bash\n#!/bin/bash\n\n# Komut çıktısını bir değişkene atayın (backticks kullanılarak)\nsonuc=`ls`\n\n# Değişkeni ekrana yazdırın\necho \"$sonuc\"\n```\n\nBu iki yöntem, komutun çıktısını almak ve bu çıktıyı bir değişkene atamayı sağlar. Backticks yöntemi daha eski bir yöntemdir ve `$(command)` yöntemi genellikle tercih edilir çünkü okuşturma yapısı daha okunabilir ve anlaşılır hale getirir.\n\nÖrneğin, bir komutun çıktısını alıp bu çıktıyı kullanarak başka bir işlem gerçekleştirebilirsiniz:\n\n```bash\n#!/bin/bash\n\n# Komut çıktısını bir değişkene atayın\nsonuc=$(date)\n\n# Değişkeni ekrana yazdırın ve kullanabilirsiniz\necho \"Bugünün tarihi: $sonuc\"\n```\n\nBu script, `date` komutunun çıktısını alır (`Bugün tarihini`), bu çıktıyı bir değişkene atar ve sonra bu değeri ekrana yazdırır."
+    },
+    {
+      "id": 11,
+      "question": "Değişken tanımlarken boşluk bırakılır mı?",
+      "response": "Değişken tanımlarken boşluk bırakabilirsiniz. Ancak genellikle değişken isimlerinde boşluk kullanmak uygun değildir, çünkü boşluklar genellikle değişkene ayrıştırma işaretleri olarak kabul edilir.\n\nÖrneğin:\n\n```bash\n#!/bin/bash\n\nad Soyad=\"Ayşe Yılmaz\"  # Boşluk bırakmadan tanımlama\necho \"$adSoyad\"         # Bu, \"AyşeYılmaz\" çıktısını verecektir.\n```\n\nBu örnekte `ad Soyad` ifadesinde boşluk bırakmadan değişken ismi tanımlandı ve `$adSoyad` şeklinde kullanıldı. Bu, bir tek değişkene atayarak ad ve soyad değerlerini birleştirdi.\n\nEğer ayrı değişkenler kullanmak isterseniz:\n\n```bash\n#!/bin/bash\n\nad=\"Ayşe\"\nsoyad=\"Yılmaz\"\n\necho \"$ad $soyad\"  # Bu, \"Ayşe Yılmaz\" çıktısını verecektir.\n```\n\nBu örnekte `ad` ve `soyad` ayrı değişkenlerle tanımlandı ve boşluklar kullanılarak ad ve soyad değerleri birleştirildi.\n\nÖzetle, değişken isimlerinde boşluk bırakmak genellikle uygun değildir. Ayrı değişkenler kullanarak daha okunabilir ve yönetilebilir kod yazmak daha iyi bir uygulamadır."
+    },
+    {
+      "id": 12,
+      "question": "Bash'te tek tırnak (' ') ile çift tırnak (\" \") arasındaki temel fark nedir?",
+      "response": "Tek tırnak (`' '`) ve çift tırnak (`\" \"`) arasındaki temel farklar şunlardır:\n\n- **Çift Tırnak (\" \")**:\n  - İçerisine alınan metni doğrudan yorumlamaz.\n  - Değişkenler ve özel karakterler (örneğin, `$`, `\\`) doğrudan işlenir.\n  - Çift tırnak içindeki değişkenler ve özel karakterler otomatik olarak genişletilir.\n\n- **Tek Tırnak (' ')**:\n  - İçerisine alınan metni tamamen yorumlamaz.\n  - Değişkenler ve özel karakterler doğrudan kalmış kalır.\n  - Tek tırnak içindeki değişkenler ve özel karakterler string olarak kabul edilir.\n\nÖrnekler:\n\n```bash\n# Çift Tırnak Örneği\nname=\"Ayşe\"\necho \"Merhaba, benim adım $name.\"  # Bu, \"Merhaba, benim adım Ayşe.\" çıktısını verecektir.\n```\n\n```bash\n# Tek Tırnak Örneği\nname=\"Ayşe\"\necho 'Merhaba, benim adım $name.'  # Bu, \"Merhaba, benim adım $name.\" çıktısını verecektir.\n```\n\nBu örneklere göre, çift tırnak içindeki `$name` değişkeni genişletilerek kullanılır, ancak tek tırnak içindeki `$name` string olarak kalır."
+    },
+    {
+      "id": 13,
+      "question": "Bir string değişkenin uzunluğunu nasıl bulurum?",
+      "response": "Bash scriptlerinde bir string değişkenin uzunluğunu bulmak için `${#variablename}` sıntaxını kullanabilirsiniz. Örneğin:\n\n```bash\nvariable=\"Merhaba Dünya\"\nlength=${#variable}\necho \"String uzunluğu: $length\"  # Bu örnekte çıktı: String uzunluğu: 11\n```\n\nBu kod parçacığı, `variable` adlı string değişkeninin uzunluğunu hesaplar ve `length` değişkenine atar. Sonra bu uzunluğu ekrana yazdırır."
+    },
+    {
+      "id": 14,
+      "question": "Bash scriptinin en üstüne (shebang) hangi satır yazılmalıdır?",
+      "response": "Bash scriptinin en üstüne yazılacak satır, scriptin Bash tarafından doğru şekilde yürütüleceğinden emin olmak için `/bin/bash` yoluyla başlamalıdır. Bu satır genellikle \"shebang\" olarak da bilinir ve aşağıdaki gibidir:\n\n```bash\n#!/bin/bash\n```\n\nBu satır, işletim sistemi tarafından scriptin çalıştırılacağı programı belirtir. `#!/` ile başlar ve ardından scriptin yürütüldüğü yolu belirtir. `/bin/bash` genellikle Bash sürümünün bulunması gereken yerdir.\n\nEğer Bash sürümünüz farklı bir yolda bulunuyorsa, o yolu kullanabilirsiniz. Örneğin:\n\n```bash\n#!/usr/bin/env bash\n```\n\nBu satır, `env` komutunu kullanarak en uygun Bash sürümünü otomatik olarak bulmayı sağlar.\n\nBu satırı scriptinizin ilk satırı olarak ekleyerek, işletim sistemi scripti çalıştırırken hangi interpreter'i kullanması gerektiğini belirtebilirsiniz."
+    },
+    {
+      "id": 15,
+      "question": "Bash'te yorum satırı nasıl oluşturulur?",
+      "response": "Bash'te yorum satırları, `#` simgesi ile başlar. Herhangi bir satırda `#` işaretinin ardından gelen metin yorum satırı olarak kabul edilir ve komut satırında bu metni çalıştırmaz.\n\nÖrnek:\n```bash\n# Bu bir yorum satırıdır.\necho \"Bu bir komut satırıdır.\"  # Bu satır çalıştırılacaktır.\n```\n\nBu örnekte, `#` işaretinden sonra gelen metin yorum satırı olarak kabul edilir ve çalıştırmadan bırakılır. Diğer metin (`echo \"Bu bir komut satırıdır.\"`) ise normalde yürütülecektir."
+    },
+    {
+      "id": 16,
+      "question": "Betik çalıştırılırken verilen ilk parametreye nasıl ulaşılır?",
+      "response": "Bash betiği çalıştırılırken verilen ilk parametreyi kullanmak için `$1` değişkenini kullanabilirsiniz. `$1` değişkeni, betikin ilk argümanını (parametresini) temsil eder.\n\nÖrnek Betik:\n```bash\n#!/bin/bash\necho \"İlk parametre: $1\"\n```\n\nBu betikte, `echo \"İlk parametre: $1\"` komutu ile girdiğiniz ilk argüman yazdırılır. Örneğin:\n\n```bash\n$ ./betik.sh parametre1 parametre2\nİlk parametre: parametre1\n```\n\nBu örnekte, `$1` değişkeni `parametre1` değerini içerir.\n\nEğer daha fazla parametre kullanmak isterseniz, `$2`, `$3`, vb. değişkenlerini de kullanabilirsiniz:\n\n```bash\n#!/bin/bash\necho \"İlk parametre: $1\"\necho \"İkinci parametre: $2\"\n```\n\nBu betikte, `echo \"İkinci parametre: $2\"` komutu ile girdiğiniz ikinci argüman yazdırılır. Örneğin:\n\n```bash\n$ ./betik.sh parametre1 parametre2 parametre3\nİlk parametre: parametre1\nİkinci parametre: parametre2\n```\n\nBu örnekte, `$2` değişkeni `parametre2` değerini içerir."
+    },
+    {
+      "id": 17,
+      "question": "Geçilen tüm argümanların sayısını veren özel değişken hangisidir?",
+      "response": "$#"
+    },
+    {
+      "id": 18,
+      "question": "If koşullu ifadesinde 'eşitlik' kontrolü nasıl yapılır?",
+      "response": "Eşitlik kontrolü yapmak için `==` operatörü kullanılır. Örneğin, bir değişkenin değeri başka bir değerle eşittir mi diye kontrol etmek isteyebilirsiniz:\n\n```bash\nif [ \"$variable\" == \"value\" ]; then\n    echo \"Değer eşittir.\"\nelse\n    echo \"Değer eşit değildir.\"\nfi\n```\n\nBu örnekte, `$variable` değişkeninin değeri `value` ile eşit olup olmadığını kontrol edilir. Eşitse, \"Değer eşittir.\" mesajı yazdırılır; eşit değilse, \"Değer eşit değildir.\" mesajı yazdırılır.\n\nNot: `[` ve `]` parantezleri genellikle `test` komutuyla de kullanılabilir:\n\n```bash\nif test \"$variable\" == \"value\"; then\n    echo \"Değer eşittir.\"\nelse\n    echo \"Değer eşit değildir.\"\nfi\n```\n\nAncak, modern Bash scriptlerinde `[` parantezi genellikle tercih edilir çünkü daha hızlı ve daha güvenlidır."
+    },
+    {
+      "id": 19,
+      "question": "Bir dosyanın var olup olmadığını hangi if koşuluyla anlarım?",
+      "response": "Dosyanın var olup olmadığını kontrol etmek için `-a` veya `-e` koşulunu kullanabilirsiniz. Bu iki koşul aynı sonucu verir ve bir dosya var olduğunda true döndürür.\n\nÖrnek kullanım:\n```bash\nif [ -a myfile.txt ]; then\n  echo \"Dosya mevcut!\"\nfi\n\n# veya\n\nif [ -e myfile.txt ]; then\n  echo \"Dosya mevcut!\"\nfi\n```\n\nBu ifadeler, `myfile.txt` dosyasının var olup olmadığını kontrol eder ve eğer dosya varsa \"Dosya mevcut!\" mesajını yazdırır."
+    },
+    {
+      "id": 20,
+      "question": "for döngüsü ile 1'den 5'e kadar nasıl saydırırım?",
+      "response": "Bu sorunuz için `for` döngüsünü kullanabilirsiniz. İşte 1'den 5'e kadar sayılmak istediğiniz kod örneği:\n\n```bash\nfor i in {1..5}\ndo\n    echo $i\ndone\n```\n\nBu kod parçacığı, `{1..5}` ifadesini kullanarak 1'den 5'e kadar olan sayıları döngüde geçecektir ve her adımda `$i` değişkeninin değerini ekrana yazdıracaktır.\n\nEğer daha fazla özelleştirme yapmak isterseniz, örneğin belirli bir mesaj eklemek veya başka komutları çalıştırmak gibi, aşağıdaki gibi genişletebilirsiniz:\n\n```bash\nfor i in {1..5}\ndo\n    echo \"Sayı: $i\"\ndone\n```\n\nBu kodda her adımda sayı ile bir mesaj yazdırılacaktır."
+    },
+    {
+      "id": 21,
+      "question": "case yapısının kapanış kelimesi nedir?",
+      "response": "`case` yapısı için kapanış kelimesi `esac` dır.\n\nÖrnek bir kullanım:\n\n```bash\ncase $ANIMAL in\n    horse | dog | cat)\n        echo -n \"four\";;\n    man | kangaroo )\n        echo -n \"two\";;\n    *)\n        echo -n \"an unknown number of\";;\nesac\necho \" legs.\"\n```\n\nBu örnekte, `esac` ifadesi `case` yapısının kapanışını belirtir."
+    },
+    {
+      "id": 22,
+      "question": "Bir döngüden erken çıkmak için hangi komut kullanılır?",
+      "response": "Bu sorunun cevabı `break` komutudur. Bash'de bir döngüden erken çıkmak için kullanılan temel komut `break` dir. Bu komut, bulunduğu en yakın döngüyü sonlandırır.\n\nÖrneğin:\n\n```bash\nfor i in {1..5}\ndo\n  if [ $i -eq 3 ]; then\n    break\n  fi\n  echo \"İterasyon: $i\"\ndone\n```\n\nBu örnekte, `break` komutu ile döngü 3. iterasyonda sona eriyor ve \"İterasyon: 1\" ve \"İterasyon: 2\" çıktısı verilirken \"İterasyon: 3\" çıktısı verilmeyecektir.\n\nDiğer bir örnek:\n\n```bash\nwhile true\ndo\n  read -p \"Girdi yapın (q tuşu ile çıkabilirsiniz): \" input\n  if [ \"$input\" == \"q\" ]; then\n    break\n  fi\n  echo \"Girdiniz: $input\"\ndone\n```\n\nBu örnekte, kullanıcı 'q' tuşuna basarak döngüden erken çıkabilir."
+    },
+    {
+      "id": 23,
+      "question": "Bash'te dizi (array) nasıl tanımlanır?",
+      "response": "Bash'te dizileri tanımlamak için köşeli parantezler `[ ]` kullanılır. Dizinin elemanlarına indeks numaraları ile erişilebilir ve dizinin uzunluğunu `${#array_name[@]}` komutuyla bulabilirsiniz.\n\nÖrnek bir dizi tanımlama:\n\n```bash\nfruits=(apple banana cherry)\n```\n\nBu örnekte, `fruits` adında bir dizi tanımlanmış ve üç elemanla doldurulmuştur. Elemanlar köşeli parantezler içinde virgülle ayrılmış olarak listelenmiştir.\n\nDizinin uzunluğunu bulmak için:\n\n```bash\necho ${#fruits[@]}\n```\n\nBu komut, `fruits` dizisinin eleman sayısını (3) yazdıracaktır.\n\nDizinin bir elemanına erişmek için indeks numarası kullanılır. Dizilerde indeks numaraları sıfırdan başlar:\n\n```bash\necho ${fruits[0]}  # Bu komut \"apple\" yazdıracaktır.\n```\n\nBu şekilde, dizinin her bir elemanına ve uzunluğuna kolay erişim sağlayabilirsiniz."
+    },
+    {
+      "id": 24,
+      "question": "Bir dizideki tüm elemanları nasıl yazdırırım?",
+      "response": "Bash'te bir dizideki tüm elemanları yazdırmak için `for` döngüsü kullanabilirsiniz. Örneğin, aşağıdaki komutu kullanarak `my_array` adlı bir dizideki tüm elemanlarını yazdırabilirsiniz:\n\n```bash\nfor element in \"${my_array[@]}\"; do\n  echo \"$element\"\ndone\n```\n\nBu komut, `my_array` dizisindeki her bir elemanı `$element` değişkenine atar ve bu değeri `echo` komutuyla yazdırır. Bu şekilde, dizideki tüm elemanlar sırasıyla ekrana yazdırılır.\n\nEğer dizinin adını belirtmediniz, genel bir örnek verelim:\n\n```bash\nmy_array=(\"elma\" \"armut\" \"muz\")\n\nfor element in \"${my_array[@]}\"; do\n  echo \"$element\"\ndone\n```\n\nBu komutu çalıştırdığınızda ekrana şu şekilde yazdırılacaktır:\n\n```\nelma\narmut\nmuz\n```"
+    },
+    {
+      "id": 25,
+      "question": "Bash fonksiyonları nasıl tanımlanır?",
+      "response": "Bash fonksiyonları tanımlamak için aşağıdaki adımları izleyebilirsiniz:\n\n1. Fonksiyon tanımlama:\n   ```bash\n   my_function() {\n       # Fonksiyon içeriği buraya yazılır.\n       echo \"Bu mesaj, fonksiyon çalıştığında ekrana yazdırılacaktır.\"\n   }\n   ```\n\n2. Fonksiyonu çağırma:\n   ```bash\n   my_function\n   ```\n\n3. Fonksiyonun yerel değişkenlerini kullanmak için `local` anahtar kelimesi kullanabilirsiniz:\n   ```bash\n   my_function() {\n       local message=\"Bu bir yerel değişkendir.\"\n       echo \"$message\"\n   }\n   ```\n\n4. Fonksiyon parametreleri alabilir ve bunları kullanabilirsiniz:\n   ```bash\n   greet_user() {\n       local name=\"$1\"  # Parametre olarak alınan adı 'name' değişkenine atayın.\n       echo \"Merhaba, $name!\"\n   }\n   ```\n\n5. Fonksiyonun içeriğinde döngüler ve koşullu ifadeler kullanabilirsiniz:\n   ```bash\n   check_number() {\n       local number=\"$1\"\n       if (( number > 0 )); then\n           echo \"Sayı pozitiftir.\"\n       elif (( number < 0 )); then\n           echo \"Sayı negatiftir.\"\n       else\n           echo \"Sayı sıfırdır.\"\n       fi\n   }\n   ```\n\nBu örnekler, Bash fonksiyonlarının temel kullanımını göstermektedir. Fonksiyonları kullanarak kodunuzu daha düzenli ve yeniden kullanılabilir yapabilirsiniz."
+    },
+    {
+      "id": 26,
+      "question": "Fonksiyona parametre nasıl gönderilir ve fonksiyon içinde nasıl okunur?",
+      "response": "Fonksiyona parametre göndermek ve fonksiyon içinde parametreyi okumak için aşağıdaki adımları takip edebilirsiniz:\n\n- Parametre Gönderme:\n  - Fonksiyon çağrılırken, parametreler parantez içine yazılır.\n  - Örneğin, bir `myFunction` fonksiyonuna iki parametre göndermek için şu şekilde yapılır: `myFunction param1 param2`.\n\n- Parametre Okuma:\n  - Fonksiyon içinde parametreleri okumak için parametre isimlerini kullanılır.\n  - Örneğin, yukarıdaki örnekte `param1` ve `param2` parametrelerini fonksiyonun içinden şu şekilde okuyabilirsiniz: `echo \"Parametre 1: $param1\"`.\n\nÖrnek Betik:\n```bash\n#!/bin/bash\n\n# Fonksiyon tanımlanır\nmyFunction() {\n    echo \"Fonksiyon içinde parametre 1: $1\"\n    echo \"Fonksiyon içinde parametre 2: $2\"\n}\n\n# Fonksiyona parametreler gönderilir\nmyFunction param1 param2\n```\n\nBu betikte, `myFunction` fonksiyonuna iki parametre (`param1` ve `param2`) gönderilir. Fonksiyon içinde bu parametreleri okuyarak ekrana yazdırılır.\n\nEğer daha fazla parametre kullanmak isterseniz, `$3`, `$4`, vb. değişkenlerini de kullanabilirsiniz:\n\n```bash\n#!/bin/bash\n\n# Fonksiyon tanımlanır\nmyFunction() {\n    echo \"Fonksiyon içinde parametre 1: $1\"\n    echo \"Fonksiyon içinde parametre 2: $2\"\n    echo \"Fonksiyon içinde parametre 3: $3\"\n}\n\n# Fonksiyona üç parametre gönderilir\nmyFunction param1 param2 param3\n```\n\nBu betikte, `myFunction` fonksiyonuna üç parametre (`param1`, `param2`, ve `param3`) gönderilir. Fonksiyon içinde bu parametreleri okuyarak ekrana yazdırılır."
+    },
+    {
+      "id": 27,
+      "question": "Stdout ve stderr aynı dosyaya nasıl yönlendirilir?",
+      "response": "Stdout ve stderr aynı dosyaya yönlendirmek için aşağıdaki komutları kullanabilirsiniz:\n\n- `&>` veya `>&` operatörleri kullanarak standard输出和标准错误输出可以使用以下命令导向同一个文件：\n\n- 使用 `&>` 或 `>&` 操作符将标准输出和标准错误输出导向同一个文件。例如：\n  ```bash\n  command &> output.txt\n  ```\n\n- 上述命令等同于：\n  ```bash\n  >output.txt 2>&1\n  ```\n\n- 这意味着标准输出（file descriptor 1）和标准错误输出（file descriptor 2）都会被导向 `output.txt` 文件。"
+    },
+    {
+      "id": 28,
+      "question": "Bir komutun arka planda (background) çalışması nasıl sağlanır?",
+      "response": "Bir komutun arka planda çalışmasını sağlamak için `&` karakterini komut satırının sonuna ekleyin. İşte bir örnek:\n\n```bash\nkomut & \n```\n\nBu komut, `komut`'u arka planda çalıştırır ve kontrol imzasına (prompt) geri döner.\n\nÖrneğin, bir dosyayı arka planda kopyalayabilirsiniz:\n\n```bash\ncp largefile.txt /destination/directory & \n```\n\nBu komut, `largefile.txt` dosyasını `/destination/directory/`'ye kopyalar ve işlemi tamamladığında geri bildirim vermez. Kontrol imzasına döner ve diğer komutları devam ettirebilirsiniz.\n\nEğer komutunuzun durumunu kontrol etmek istiyorsanız, `jobs` komutu ile geçici olarak arka planlı işlerinizi görebilirsiniz. Örneğin:\n\n```bash\njobs \n```\n\nBu komut, şu an arka planlı çalışan işleri listeler.\n\nArka planda çalışan bir komutu geri planına almak için `%n` kullanabilirsiniz, burada `n` iş numarasını temsil eder. Örneğin:\n\n```bash\nbg %1 \n```\n\nBu komut, iş numarası 1 olan işi geri planına alır.\n\nUmarım bu bilgiler yardımcı olur!"
+    },
+    {
+      "id": 29,
+      "question": "Son çalıştırılan komutun çıkış durumunu (exit status) nasıl öğrenirim?",
+      "response": "Son çalıştırılan komutun çıkış durumunu öğrenmek için `$?` değişkenini kullanabilirsiniz. Bu değişken, son komutun tamamlandığında yürütüldüğünde bu komunun çıkış durumunu tutar.\n\nÖrneğin:\n\n```bash\nkomut\necho $? \n```\n\nBu komutlarla, `komut` adlı komutu çalıştırıp, ardından `?` değişkeninin değerini kontrol ederek son komutun çıkış durumunu görebilirsiniz. \n\nÇıktıların anlamı şu şekildedir:\n\n- `0`: Komut başarılı bir şekilde çalıştı.\n- Bağımsız sayılar: Komut başarısız oldu ve hata kodu verildi.\n\nÖrneğin, aşağıdaki komutları kullanarak bu işlevi test edebilirsiniz:\n\n```bash\nls\necho $?\n```\n\nBu komutların sonucunda `0` çıktısı alırsınız, çünkü `ls` komutu başarıyla çalıştı. Eğer bir dosya bulunamazsa ve `ls` komutunu çalıştırırsanız:\n\n```bash\nls dosya_yok.txt\necho $?\n```\n\nBu durumda `2` veya başka bir hata kodu çıktısı alabilirsiniz, çünkü `dosya_yok.txt` dosyası bulunamadığı için komut başarısız oldu."
+    },
+    {
+      "id": 30,
+      "question": "Dizideki eleman sayısını nasıl bulurum?",
+      "response": "Dizideki eleman sayısını bulmak için `${#array_name[@]}` ifadesini kullanabilirsiniz. Bu ifade, dizinin içindeki toplam eleman sayısını verir.\n\nÖrneğin:\n\n```bash\nmy_array=(\"elma\" \"armut\" \"muz\")\necho \"${#my_array[@]}\"\n```\n\nBu komutu çalıştırdığınızda `3` çıktısı alırsınız, çünkü `my_array` dizisinde 3 eleman bulunuyor.\n\nEğer dizinin adını belirtmediniz, genel bir örnek verelim:\n\n```bash\nmy_array=(\"elma\" \"armut\" \"muz\")\necho \"${#my_array[@]}\"\n```\n\nBu komutu çalıştırdığınızda `3` çıktısı alırsınız."
+    }
+  ]
+}
