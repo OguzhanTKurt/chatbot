@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "apps.rag",
     "apps.documents",
     "apps.prompts",
+    "apps.mudb_data",
 ]
 
 MIDDLEWARE = [
@@ -69,6 +70,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 # SQLite varsayılan, PostgreSQL için .env'de DATABASE_URL güncellenir
 _db_url = config("DATABASE_URL", default="sqlite:///db.sqlite3")
 
+DATABASES = {}
+
 if _db_url.startswith("postgres"):
     import re
     _match = re.match(
@@ -77,30 +80,30 @@ if _db_url.startswith("postgres"):
     )
     if _match:
         g = _match.groupdict()
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.postgresql",
-                "NAME": g["name"],
-                "USER": g["user"],
-                "PASSWORD": g["password"],
-                "HOST": g["host"],
-                "PORT": g["port"],
-            }
+        DATABASES["default"] = {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": g["name"],
+            "USER": g["user"],
+            "PASSWORD": g["password"],
+            "HOST": g["host"],
+            "PORT": g["port"],
         }
     else:
         raise ValueError("Geçersiz DATABASE_URL formatı. Örnek: postgres://user:pass@host:5432/dbname")
 else:
     # SQLite — geliştirme ortamı
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+    DATABASES["default"] = {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
+
 
 # ── Engine Konfigürasyonu ─────────────────────────────────────────────────────
 ENGINE_BACKEND = config("ENGINE_BACKEND", default="rule_based")
 CONTEXT_WINDOW = config("CONTEXT_WINDOW", default=20, cast=int)
+
+# ── Gemini Vision API Ayarı ───────────────────────────────────────────────────
+GEMINI_API_KEY = config("GEMINI_API_KEY", default="")
 
 # ── Ollama / Llama 3 ayarları ─────────────────────────────────────────────────
 OLLAMA_BASE_URL = config("OLLAMA_BASE_URL", default="http://localhost:11434")

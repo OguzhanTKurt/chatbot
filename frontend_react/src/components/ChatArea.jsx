@@ -111,21 +111,31 @@ const ChatArea = ({ conversation, messages, language, onToggleSidebar, onDelete,
     }
   };
 
+  const handleSendTemplate = (text) => {
+    if (isSending || isUploading) return;
+    onSendMessage(text);
+  };
+
   const handleSend = () => {
-    const trimmed = inputValue.trim();
-    if (trimmed || attachedFiles.length > 0) {
-      const messageContent = trimmed || "Lütfen eklediğim dokümanları incele.";
-      if (!isSending) {
-        onSendMessage(messageContent);
-        setInputValue('');
-        setAttachedFiles([]); // Clear all after sending
-        if (textareaRef.current) {
-          textareaRef.current.style.height = "auto";
-          textareaRef.current.focus();
-        }
-      }
+    if ((!inputValue.trim() && attachedFiles.length === 0) || isSending || isUploading) return;
+    if (inputValue.trim()) {
+        onSendMessage(inputValue.trim());
+    }
+    setInputValue('');
+    setAttachedFiles([]);
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
     }
   };
+
+  const SUGGESTED_TEMPLATES = [
+    { id: 'dimensions', text: 'ISEDA013 parçasının boyutları nelerdir?' },
+    { id: 'material', text: 'St37 malzeme detaylarını getir' },
+    { id: 'standards', text: 'Aktif modül standart grupları' },
+    { id: 'bom', text: 'Pnomatik silindir BOM parçaları' },
+    { id: 'color', text: 'Gri renk lisans kodu nedir?' },
+    { id: 'parameter', text: 'Modül doluluk parametre durumu' }
+  ];
 
   return (
     <div className="chat-area">
@@ -160,6 +170,24 @@ const ChatArea = ({ conversation, messages, language, onToggleSidebar, onDelete,
       </div>
 
       <footer className="input-area">
+        {messages.length === 0 && (
+          <div className="suggestions-container">
+            <div className="suggestions-grid">
+              {SUGGESTED_TEMPLATES.map(tpl => (
+                <button 
+                  key={tpl.id} 
+                  className="suggestion-card" 
+                  onClick={() => handleSendTemplate(tpl.text)}
+                >
+                  <span>{tpl.text}</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         <div className="input-wrapper input-wrapper-col">
           {attachedFiles.length > 0 && (
             <div className="attachments-preview">

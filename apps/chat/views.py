@@ -115,9 +115,13 @@ def send_message(request, conversation_id):
     memory_manager = MemoryManager()
     history = memory_manager.build_context(conversation, user_content)
 
-    # Engine'den yanıt al
-    engine = get_engine()
-    assistant_content = engine.get_response(user_content, history, language=language, model_name=model_name)
+    # Fast-Path Bypass for Empty
+    if history and len(history) > 0 and history[-1].get("role") == "rag_context" and history[-1].get("content") == "__FAST_EMPTY__":
+        assistant_content = "Bu konuda yeterli bilgiye sahip değilim."
+    else:
+        # Engine'den yanıt al
+        engine = get_engine()
+        assistant_content = engine.get_response(user_content, history, language=language, model_name=model_name)
 
     # Asistan yanıtını kaydet
     assistant_msg = Message.objects.create(

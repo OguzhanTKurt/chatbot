@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 function formatTime(isoString) {
   if (!isoString) return '';
@@ -28,7 +30,11 @@ const MessageBubble = ({ role, content, createdAt, isTyping }) => {
           </div>
         ) : (
           <>
-            <div className={`bubble ${avatarClass}`}>{content}</div>
+            <div className={`bubble ${avatarClass}`}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {content}
+              </ReactMarkdown>
+            </div>
             <span className="msg-time">{formatTime(createdAt)}</span>
           </>
         )}

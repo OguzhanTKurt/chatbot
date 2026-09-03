@@ -5,7 +5,7 @@ from django.db.models import F
 from pgvector.django import CosineDistance
 from apps.rag.models import DocumentChunk
 from rank_bm25 import BM25Okapi
-from apps.rag.chunker import embedding_model
+from apps.rag.chunker import get_embedding_model
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +33,22 @@ class HybridRetriever:
         self.max_distance = max_distance
         self.min_bm25_score = min_bm25_score
 
+    @staticmethod
+    def _is_toc_chunk(text: str) -> bool:
+        """Kullanıcının sorgusu İçindekiler sayfasındaki başlıkla çakıştığında başlık sayfasını eler."""
+        if text.count("....") > 2 or text.count("...") > 6:
+            if any(hdr in text for hdr in ["T10", "T05", "İÇİNDEKİLER", "Classification"]):
+                if text.count(".") > 15:
+                    return True
+        return False
+
+    @staticmethod
+    def _tokenize(text: str) -> list:
+        import re
+        clean_txt = text.lower()
+        clean_txt = re.sub(r'[^\w\s]', ' ', clean_txt)
+        return [w for w in clean_txt.split() if len(w) > 1]
+
     def search(self, query, conversation=None, top_k=5):
         # 1. Aramayı sadece kullanıcının sohbeti ve global dokümanlarda kısıtla
         q_filter = models.Q(global_document__isnull=False)
@@ -44,14 +60,15 @@ class HybridRetriever:
             return []
 
         # 2. Dense Search (pgvector ile Cosine Distance + eşik filtresi)
+        embedding_model = get_embedding_model()
         query_embedding = embedding_model.encode(query).tolist()
         vector_qs = (
             base_qs
             .annotate(distance=CosineDistance('embedding', query_embedding))
             .filter(distance__lt=self.max_distance)
-            .order_by('distance')[:20]
+            .order_by('distance')[:30]
         )
-        vector_results = list(vector_qs)
+        vector_results = [c for c in vector_qs if not self._is_toc_chunk(c.text)]
 
         if not vector_results:
             logger.info(
@@ -60,22 +77,24 @@ class HybridRetriever:
                 self.max_distance, query[:80]
             )
 
-        # 3. Sparse Search (BM25 ile Anahtar Kelime Araması + eşik filtresi)
-        all_chunks = list(base_qs.all())
-        tokenized_corpus = [chunk.text.split() for chunk in all_chunks]
-        bm25 = BM25Okapi(tokenized_corpus)
+        # 3. Sparse Search (BM25 ile Normalize Edilmiş Anahtar Kelime Araması)
+        all_chunks = [c for c in base_qs.all() if not self._is_toc_chunk(c.text)]
+        if all_chunks:
+            tokenized_corpus = [self._tokenize(chunk.text) for chunk in all_chunks]
+            bm25 = BM25Okapi(tokenized_corpus)
 
-        tokenized_query = query.split()
-        bm25_scores = bm25.get_scores(tokenized_query)
+            tokenized_query = self._tokenize(query)
+            bm25_scores = bm25.get_scores(tokenized_query)
 
-        # BM25 sonuçlarını skorlarına göre sırala ve eşik altındakileri filtrele
-        chunk_score_pairs = [
-            (chunk, score)
-            for chunk, score in zip(all_chunks, bm25_scores)
-            if score >= self.min_bm25_score
-        ]
-        chunk_score_pairs.sort(key=lambda x: x[1], reverse=True)
-        bm25_results = [pair[0] for pair in chunk_score_pairs[:20]]
+            chunk_score_pairs = [
+                (chunk, score)
+                for chunk, score in zip(all_chunks, bm25_scores)
+                if score >= self.min_bm25_score
+            ]
+            chunk_score_pairs.sort(key=lambda x: x[1], reverse=True)
+            bm25_results = [pair[0] for pair in chunk_score_pairs[:20]]
+        else:
+            bm25_results = []
 
         # Her iki arama da boş döndüyse → ilgili doküman yok
         if not vector_results and not bm25_results:

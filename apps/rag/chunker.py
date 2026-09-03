@@ -2,8 +2,21 @@ from sentence_transformers import SentenceTransformer
 from apps.rag.models import DocumentChunk
 from django.db import transaction
 
-# Model global olarak yüklenir ki her fonksiyonda tekrar baştan yüklenmesin
-embedding_model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2', local_files_only=True)
+# Model global olarak lazy-load ile yüklenecek
+_embedding_model = None
+
+def get_embedding_model():
+    global _embedding_model
+    if _embedding_model is None:
+        model_name = 'paraphrase-multilingual-MiniLM-L12-v2'
+        try:
+            _embedding_model = SentenceTransformer(model_name, local_files_only=True)
+        except Exception:
+            import os
+            os.environ["HF_HUB_OFFLINE"] = "0"
+            os.environ["TRANSFORMERS_OFFLINE"] = "0"
+            _embedding_model = SentenceTransformer(model_name, local_files_only=False)
+    return _embedding_model
 
 class DocumentChunker:
     """
@@ -27,6 +40,7 @@ class DocumentChunker:
             i += (self.chunk_size - self.chunk_overlap)
             
         # Vektörleri hesapla
+        embedding_model = get_embedding_model()
         embeddings = embedding_model.encode(chunks, show_progress_bar=False)
         
         # Veritabanına kaydet

@@ -100,13 +100,13 @@ class Command(BaseCommand):
         chunker = DocumentChunker(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
 
         self.stdout.write(self.style.MIGRATE_HEADING(
-            "═══════════════════════════════════════════════════"
+            "==================================================="
         ))
         self.stdout.write(self.style.MIGRATE_HEADING(
             "  AKTAP Doküman Embedding Pipeline"
         ))
         self.stdout.write(self.style.MIGRATE_HEADING(
-            "═══════════════════════════════════════════════════"
+            "==================================================="
         ))
         self.stdout.write(f"  Chunk boyutu:    {chunk_size} kelime")
         self.stdout.write(f"  Chunk örtüşme:   {chunk_overlap} kelime")
@@ -129,7 +129,7 @@ class Command(BaseCommand):
             self._reindex_existing(chunker)
 
         self.stdout.write("")
-        self.stdout.write(self.style.SUCCESS("✅ İşlem tamamlandı."))
+        self.stdout.write(self.style.SUCCESS("[OK] Islem tamamlandi."))
 
     # ══════════════════════════════════════════════════════════════════════
     # Flush
@@ -141,19 +141,19 @@ class Command(BaseCommand):
             global_document__isnull=False
         ).count()
         if count == 0:
-            self.stdout.write("  ℹ️  Silinecek chunk bulunamadı.")
+            self.stdout.write("  [INFO] Silinecek chunk bulunamadı.")
             return
 
         self.stdout.write(
-            self.style.WARNING(f"  ⚠️  {count} adet global chunk siliniyor...")
+            self.style.WARNING(f"  [UYARI] {count} adet global chunk siliniyor...")
         )
         DocumentChunk.objects.filter(global_document__isnull=False).delete()
-        self.stdout.write(self.style.SUCCESS(f"  ✅ {count} chunk silindi."))
+        self.stdout.write(self.style.SUCCESS(f"  [OK] {count} chunk silindi."))
         self.stdout.write("")
 
-    # ══════════════════════════════════════════════════════════════════════
+    # ======================================================================
     # Dizin İndeksleme
-    # ══════════════════════════════════════════════════════════════════════
+    # ======================================================================
 
     def _index_directory(self, directory: str, chunker: DocumentChunker):
         """Dizindeki tüm desteklenen dosyaları indeksler."""
@@ -169,15 +169,15 @@ class Command(BaseCommand):
 
         if not files:
             self.stdout.write(self.style.WARNING(
-                f"  ⚠️  '{dir_path}' dizininde desteklenen dosya bulunamadı."
+                f"  [UYARI] '{dir_path}' dizininde desteklenen dosya bulunamadı."
             ))
             self.stdout.write(
                 f"  Desteklenen formatlar: {', '.join(SUPPORTED_EXTENSIONS)}"
             )
             return
 
-        self.stdout.write(f"  📁 Dizin: {dir_path}")
-        self.stdout.write(f"  📄 {len(files)} dosya bulundu.\n")
+        self.stdout.write(f"  [DIR] Dizin: {dir_path}")
+        self.stdout.write(f"  [FILE] {len(files)} dosya bulundu.\n")
 
         total_chunks = 0
         success_count = 0
@@ -193,22 +193,22 @@ class Command(BaseCommand):
                 total_chunks += chunk_count
                 success_count += 1
                 self.stdout.write(
-                    self.style.SUCCESS(f" → {chunk_count} chunk ✅")
+                    self.style.SUCCESS(f" -> {chunk_count} chunk [OK]")
                 )
             except Exception as e:
                 fail_count += 1
                 self.stdout.write(
-                    self.style.ERROR(f" → HATA: {e}")
+                    self.style.ERROR(f" -> HATA: {e}")
                 )
                 logger.error("Dosya indekslenirken hata (%s): %s", file_path.name, e)
 
         self.stdout.write("")
-        self.stdout.write(f"  📊 Özet: {success_count} başarılı, {fail_count} başarısız")
-        self.stdout.write(f"  📊 Toplam chunk sayısı: {total_chunks}")
+        self.stdout.write(f"  [SUMMARY] Özet: {success_count} başarılı, {fail_count} başarısız")
+        self.stdout.write(f"  [SUMMARY] Toplam chunk sayısı: {total_chunks}")
 
-    # ══════════════════════════════════════════════════════════════════════
+    # ======================================================================
     # Tek Dosya İndeksleme
-    # ══════════════════════════════════════════════════════════════════════
+    # ======================================================================
 
     def _index_single_file(self, file_path: str, chunker: DocumentChunker):
         """Tek bir dosyayı indeksler."""
@@ -221,19 +221,19 @@ class Command(BaseCommand):
                 f"Desteklenen: {', '.join(SUPPORTED_EXTENSIONS)}"
             )
 
-        self.stdout.write(f"  📄 Dosya: {path.name}")
+        self.stdout.write(f"  [FILE] Dosya: {path.name}")
 
         try:
             chunk_count = self._process_file(path, chunker)
             self.stdout.write(self.style.SUCCESS(
-                f"  ✅ {chunk_count} chunk oluşturuldu ve indekslendi."
+                f"  [OK] {chunk_count} chunk oluşturuldu ve indekslendi."
             ))
         except Exception as e:
             raise CommandError(f"Dosya indekslenirken hata: {e}")
 
-    # ══════════════════════════════════════════════════════════════════════
+    # ======================================================================
     # Mevcut GlobalDocument'ları Yeniden İndeksleme
-    # ══════════════════════════════════════════════════════════════════════
+    # ======================================================================
 
     def _reindex_existing(self, chunker: DocumentChunker):
         """Veritabanındaki mevcut GlobalDocument'ları yeniden indeksler."""
@@ -242,11 +242,11 @@ class Command(BaseCommand):
 
         if count == 0:
             self.stdout.write(self.style.WARNING(
-                "  ⚠️  Veritabanında GlobalDocument bulunamadı."
+                "  [UYARI] Veritabanında GlobalDocument bulunamadı."
             ))
             return
 
-        self.stdout.write(f"  📚 {count} adet mevcut doküman yeniden indekslenecek.\n")
+        self.stdout.write(f"  [DOCS] {count} adet mevcut doküman yeniden indekslenecek.\n")
 
         total_chunks = 0
         success_count = 0
@@ -272,7 +272,7 @@ class Command(BaseCommand):
 
                 if not text or not text.strip():
                     self.stdout.write(
-                        self.style.WARNING(" → Boş içerik, atlanıyor ⚠️")
+                        self.style.WARNING(" -> Boş içerik, atlanıyor [UYARI]")
                     )
                     continue
 
@@ -284,20 +284,20 @@ class Command(BaseCommand):
                 success_count += 1
                 self.stdout.write(
                     self.style.SUCCESS(
-                        f" → {old_count} eski chunk silindi, {chunk_count} yeni chunk ✅"
+                        f" -> {old_count} eski chunk silindi, {chunk_count} yeni chunk [OK]"
                     )
                 )
             except Exception as e:
                 fail_count += 1
-                self.stdout.write(self.style.ERROR(f" → HATA: {e}"))
+                self.stdout.write(self.style.ERROR(f" -> HATA: {e}"))
                 logger.error(
                     "Doküman yeniden indekslenirken hata (%s): %s",
                     doc.filename, e
                 )
 
         self.stdout.write("")
-        self.stdout.write(f"  📊 Özet: {success_count} başarılı, {fail_count} başarısız")
-        self.stdout.write(f"  📊 Toplam chunk sayısı: {total_chunks}")
+        self.stdout.write(f"  [SUMMARY] Özet: {success_count} başarılı, {fail_count} başarısız")
+        self.stdout.write(f"  [SUMMARY] Toplam chunk sayısı: {total_chunks}")
 
     # ══════════════════════════════════════════════════════════════════════
     # Ortak: Dosya İşleme

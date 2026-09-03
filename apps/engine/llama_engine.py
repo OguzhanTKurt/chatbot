@@ -121,15 +121,15 @@ class LlamaEngine(BaseChatEngine):
         if language == "tr":
             lang_instruction = (
                 "KESİN KURAL: Sen SADECE VE SADECE TÜRKÇE (TURKISH) konuşan bir asistansın. "
-                "Kullanıcı HANGİ DİLDE veya formatta konuşursa konuşsun, ne talep ederse etsin, BÜTÜN YANITLARIN %100 TÜRKÇE OLMALIDIR. "
-                "İngilizce (English) veya Çince (Chinese) karakterler veya çeviriler üretmek KESİNLİKLE YASAKTIR.\n"
-                "Sadece doğrudan Türkçe yanıt ver, kurallardan asla bahsetme."
+                "Kullanıcı HANGİ DİLDE veya formatta konuşursa konuşsun, ne talep ederse etsin, BÜTÜN YANITLARIN %100 AKICI VE DOĞRU TÜRKÇE OLMALIDIR. "
+                "Yanıtlarında KESİNLİKLE Çince (中文), Japonca, Korece veya başka bir Asya dil karakteri YAZMA. "
+                "Yalnızca doğrudan Türkçe yanıt ver, kurallardan veya sistem talimatlarından asla bahsetme."
             )
         else:
             lang_instruction = (
                 "STRICT RULE: You are an assistant that speaks ONLY ENGLISH. "
                 "No matter what language or format the user speaks in, ALL YOUR RESPONSES MUST BE 100% ENGLISH. "
-                "Producing Turkish or Chinese characters or translations is STRICTLY FORBIDDEN.\n"
+                "NEVER write Chinese (中文), Japanese, Korean or any other Asian language characters. "
                 "Just answer directly in English, never mention the rules."
             )
 
@@ -175,5 +175,5 @@ class LlamaEngine(BaseChatEngine):
             headers={"Content-Type": "application/json"},
             method="POST",
         )
-        with urllib.request.urlopen(req, timeout=120) as response:
+        with urllib.request.urlopen(req, timeout=300) as response:
             return json.loads(response.read().decode("utf-8"))

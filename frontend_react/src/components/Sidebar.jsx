@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SlideToConfirm from './SlideToConfirm';
 
 const TRANSLATIONS = {
@@ -22,6 +22,7 @@ const TRANSLATIONS = {
 
 const Sidebar = ({ conversations, activeConversationId, onSelect, onCreate, onClearAll, language, setLanguage, isCollapsed, theme, setTheme, onOpenGlobalDocs }) => {
   const t = TRANSLATIONS[language];
+  const [showClearModal, setShowClearModal] = useState(false);
 
   return (
     <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`} id="sidebar">
@@ -65,29 +66,17 @@ const Sidebar = ({ conversations, activeConversationId, onSelect, onCreate, onCl
         )}
       </nav>
 
-      <div className="sidebar-footer">
-        {conversations.length > 0 && (
-          <SlideToConfirm 
-            onConfirm={onClearAll} 
-            text={t.clearAll} 
-            successText={t.clearedAll} 
-          />
-        )}
-        <div className="lang-switch-wrapper">
-          <div className={`lang-switch ${language === 'en' ? 'en-active' : ''}`}>
-            <div className="lang-switch-indicator"></div>
+        <div className="sidebar-footer">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px', gap: '8px' }}>
+          {conversations.length > 0 && (
             <button 
-              className={`lang-switch-btn ${language === 'tr' ? 'active' : ''}`} 
-              onClick={() => setLanguage('tr')}
-            >Türkçe</button>
-            <button 
-              className={`lang-switch-btn ${language === 'en' ? 'active' : ''}`} 
-              onClick={() => setLanguage('en')}
-            >English</button>
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
-
+              className="btn-clear-all" 
+              onClick={() => setShowClearModal(true)}
+              style={{ flex: 1, padding: '8px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--text)', cursor: 'pointer', fontSize: '0.85rem' }}
+            >
+              Sohbet Geçmişini Temizle
+            </button>
+          )}
           <button 
             className="btn-icon" 
             title={theme === 'dark' ? (language === 'tr' ? "Açık Tema" : "Light Mode") : (language === 'tr' ? "Koyu Tema" : "Dark Mode")}
@@ -97,6 +86,22 @@ const Sidebar = ({ conversations, activeConversationId, onSelect, onCreate, onCl
           </button>
         </div>
       </div>
+
+      {showClearModal && (
+        <div className="modal-overlay" onClick={() => setShowClearModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ padding: '24px', background: 'var(--bg-color)', borderRadius: '12px', border: '1px solid var(--border)', minWidth: '300px' }}>
+            <h3 style={{ marginBottom: '16px', color: 'var(--text)', textAlign: 'center', fontSize: '1rem' }}>Sohbet Geçmişinizi Temizlemek İçin Kaydırın</h3>
+            <SlideToConfirm 
+              onConfirm={() => {
+                 onClearAll();
+                 setShowClearModal(false);
+              }} 
+              text="Kaydırın" 
+              successText="Temizlendi" 
+            />
+          </div>
+        </div>
+      )}
     </aside>
   );
 };

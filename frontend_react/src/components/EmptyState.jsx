@@ -2,13 +2,13 @@ import React from 'react';
 
 const TRANSLATIONS = {
   tr: {
-    welcomeTitle: "AKTAP Chat'e Hoş Geldiniz",
-    welcomeSubtitle: "Llama 3 destekli yapay zeka asistanınız hazır.<br/>Yeni bir sohbet başlatarak hemen kullanmaya başlayın.",
+    welcomeTitle: "AKTAP'a Hoş Geldiniz",
+    welcomeSubtitle: "Sizin için optimize edilmiş akıllı mühendislik asistanı.<br/>Modül detayları, lisans durumları ve parça boyutları hakkında sormaya başlayın.",
     startChat: "Sohbete Başla",
   },
   en: {
-    welcomeTitle: "Welcome to AKTAP Chat",
-    welcomeSubtitle: "Your Llama 3 powered AI assistant is ready.<br/>Start a new chat to begin.",
+    welcomeTitle: "Welcome to AKTAP",
+    welcomeSubtitle: "Your optimized intelligent engineering assistant.<br/>Ask about module details, license statuses, and part dimensions.",
     startChat: "Start Chat",
   }
 };

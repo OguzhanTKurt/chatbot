@@ -662,7 +662,51 @@ body {
   font-size: 0.9rem;
   line-height: 1.65;
   word-break: break-word;
-  white-space: pre-wrap;
+}
+
+.bubble p {
+  margin: 0 0 10px 0;
+}
+.bubble p:last-child {
+  margin: 0;
+}
+
+.bubble table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 0.85rem;
+}
+
+.bubble th, .bubble td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.bubble th {
+  background: var(--bg-hover);
+  font-weight: 600;
+}
+
+.bubble code {
+  background: var(--bg-hover);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85em;
+}
+
+.bubble pre {
+  background: var(--bg-elevated);
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+}
+.bubble pre code {
+  background: transparent;
+  padding: 0;
 }
 
 .bubble.bot {
@@ -1059,4 +1103,133 @@ body {
   background-color: var(--accent);
   color: #fff;
   transform: scale(1.1);
+}
+/* Suggestions (Templates) */
+.suggestions-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  animation: fade-in 0.5s ease;
+}
+
+.suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.suggestion-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 4.5rem;
+}
+
+.suggestion-card span {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.suggestion-card svg {
+  color: var(--text-muted);
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  margin-left: 0.75rem;
+  flex-shrink: 0;
+}
+
+.suggestion-card:hover {
+  border-color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.suggestion-card:hover svg {
+  opacity: 1;
+  color: var(--accent);
+  transform: translateX(4px);
+}
+/* Suggestions (Templates) Updated */
+.suggestions-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 1rem 0;
+  animation: fade-in 0.5s ease;
+  margin-top: auto;
+}
+
+.suggestions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  justify-content: center;
+}
+
+.suggestion-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.8rem;
+  background: rgba(var(--accent-rgb), 0.05);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 20px;
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: auto;
+  white-space: nowrap;
+}
+
+.suggestion-card span {
+  flex: none;
+  line-height: 1;
+}
+
+.suggestion-card svg {
+  display: none; /* Hide icon to save space */
+}
+
+.suggestion-card:hover {
+  border-color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.15);
+  transform: translateY(-1px);
+}
+/* --- UI FIXES --- */
+.input-row {
+  align-items: center !important;
+}
+
+.message-input {
+  padding: 8px 0 !important;
+}
+
+:root[data-theme="light"] {
+  --bg-base: #f4f6f8;
+  --bg-surface: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-hover: #eaf0f6;
+  --bg-active: #dee5ed;
+  --border: rgba(0, 0, 0, 0.06);
 }
